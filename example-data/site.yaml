@@ -1,0 +1,32 @@
+# Site-wide metadata
+title: "Jane Smith - Software Engineer"
+description: "Software engineer building modern web applications. Based in San Francisco, CA."
+name: "jane smith"
+email: "hello@example.com"
+lang: "en"
+# ogImage: "/og.png"
+themeColor: "#2E5090"
+
+# Social links
+social:
+  github: "https://github.com/theserverlessdev/astro-monograph"
+  linkedin: "https://www.linkedin.com/in/janesmith"
+  blog: "https://blog.example.com"
+
+# Navigation items
+nav:
+  - label: "About"
+    href: "#about"
+    icon: "yhtmwrae"
+  - label: "Work"
+    href: "#experience"
+    icon: "tsrgicte"
+  - label: "Projects"
+    href: "#projects"
+    icon: "zhiiqoue"
+  - label: "Skills"
+    href: "#skills"
+    icon: "fwkrbvja"
+  - label: "Contact"
+    href: "#contact"
+    icon: "ozlkyfxg"
