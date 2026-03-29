@@ -1,0 +1,42 @@
+{
+  "name": "astro-monograph",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A clean, YAML-driven single-page portfolio theme for Astro. No CMS, no database — just edit YAML files and deploy.",
+  "author": "Ankur Singh <hello@anks.in> (https://anks.in)",
+  "homepage": "https://github.com/theserverlessdev/astro-monograph",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theserverlessdev/astro-monograph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/theserverlessdev/astro-monograph/issues"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "keywords": [
+    "astro",
+    "astro-theme",
+    "portfolio",
+    "resume",
+    "personal-site",
+    "tailwindcss",
+    "yaml",
+    "single-page",
+    "developer-portfolio"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.0.8",
+    "js-yaml": "^4.1.1",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "^3.7.1"
+  }
+}
