@@ -14,3 +14,9 @@ node_modules/
 # OS
 .DS_Store
 PRD.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
