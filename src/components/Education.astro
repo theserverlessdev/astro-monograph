@@ -1,0 +1,33 @@
+---
+import { load, LI, liSrc } from '../lib/data';
+const education = load('education.yaml');
+---
+<section class="py-20 md:py-28 px-6 bg-surface-sunken scroll-mt-16">
+  <div class="max-w-[960px] mx-auto">
+    <div class="reveal">
+      <p class="text-[14px] font-mono text-accent tracking-[0.12em] uppercase mb-3">{education.label}</p>
+      <h2 class="font-display text-[32px] md:text-[44px] font-bold text-ink mb-10 tracking-[-0.01em]">
+        {education.heading}
+      </h2>
+    </div>
+
+    <div class="reveal card-glow bg-surface-raised rounded-[8px] p-7 md:p-9">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-5">
+        <div>
+          <h3 class="font-display text-[22px] font-bold text-ink m-0">{education.degree}</h3>
+          <p class="text-[17px] text-ink-secondary m-0 mt-1">{education.institution}</p>
+        </div>
+        <span class="text-[14px] text-ink-tertiary font-mono whitespace-nowrap" set:html={education.dateRange} />
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        {education.highlights.map((h: any) => (
+          <div class={`flex items-center gap-3 p-3.5 rounded-[6px] ${h.featured ? 'bg-accent-wash' : 'bg-surface-sunken'}`}>
+            <lord-icon src={liSrc(h.icon)} trigger="morph" colors={LI.dark} class="li-lg"></lord-icon>
+            <span class="text-[15px] text-ink font-medium">{h.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
