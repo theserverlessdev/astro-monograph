@@ -1,0 +1,96 @@
+---
+import { load, LI, liSrc } from '../lib/data';
+const site = load('site.yaml');
+const base = import.meta.env.BASE_URL;
+---
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-[1200px] mx-auto px-6 h-[64px] flex items-center justify-between">
+    <a href={base} class="font-display text-[18px] font-bold text-ink no-underline hover:text-cern-blue transition-colors tracking-[-0.01em]">
+      {site.name}
+    </a>
+
+    <ul class="hidden md:flex items-center gap-7 list-none m-0 p-0">
+      {site.nav.map((item: any) => (
+        <li>
+          <a href={item.href} class="inline-flex items-center gap-1.5 text-[15px] text-ink-secondary hover:text-cern-blue transition-colors no-underline font-medium">
+            <lord-icon src={liSrc(item.icon)} trigger="morph" colors={LI.dark} class="li-sm"></lord-icon>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <button id="mobile-menu-btn" class="md:hidden flex flex-col gap-[6px] p-2 bg-transparent border-none cursor-pointer relative z-50" aria-label="Toggle menu" aria-expanded="false">
+      <span class="block w-6 h-[2px] bg-ink transition-all duration-300" id="bar1"></span>
+      <span class="block w-6 h-[2px] bg-ink transition-all duration-300" id="bar2"></span>
+      <span class="block w-6 h-[2px] bg-ink transition-all duration-300" id="bar3"></span>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden md:hidden bg-surface-raised/95 backdrop-blur-lg border-b border-border">
+    <ul class="list-none m-0 p-0 py-4">
+      {site.nav.map((item: any) => (
+        <li>
+          <a href={item.href} class="flex items-center gap-2.5 px-6 py-3 text-[17px] text-ink-secondary hover:text-cern-blue transition-colors no-underline">
+            <lord-icon src={liSrc(item.icon)} trigger="morph" colors={LI.dark} class="li-md"></lord-icon>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('bg-surface/90', 'backdrop-blur-lg', 'border-b', 'border-border/50', 'shadow-[0_1px_3px_rgba(0,0,0,0.05)]');
+      } else {
+        navbar.classList.remove('bg-surface/90', 'backdrop-blur-lg', 'border-b', 'border-border/50', 'shadow-[0_1px_3px_rgba(0,0,0,0.05)]');
+      }
+    });
+  }
+
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const bar1 = document.getElementById('bar1');
+  const bar2 = document.getElementById('bar2');
+  const bar3 = document.getElementById('bar3');
+
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      if (!isOpen) {
+        bar1?.classList.add('rotate-45', 'translate-y-[8px]');
+        bar2?.classList.add('opacity-0');
+        bar3?.classList.add('-rotate-45', '-translate-y-[8px]');
+      } else {
+        bar1?.classList.remove('rotate-45', 'translate-y-[8px]');
+        bar2?.classList.remove('opacity-0');
+        bar3?.classList.remove('-rotate-45', '-translate-y-[8px]');
+      }
+    });
+
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        bar1?.classList.remove('rotate-45', 'translate-y-[8px]');
+        bar2?.classList.remove('opacity-0');
+        bar3?.classList.remove('-rotate-45', '-translate-y-[8px]');
+      });
+    });
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href')!);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
