@@ -1,0 +1,69 @@
+---
+import { load, LI, liSrc } from '../lib/data';
+const site = load('site.yaml');
+const contact = load('contact.yaml');
+---
+<section id="contact" class="py-20 md:py-28 px-5 md:px-6 bg-surface scroll-mt-16">
+  <div class="max-w-[640px] mx-auto text-center">
+    <div class="reveal">
+      <p class="text-[14px] font-mono text-cern-blue tracking-[0.12em] uppercase mb-3">{contact.label}</p>
+      <h2 class="font-display text-[28px] md:text-[44px] font-bold text-ink mb-6 tracking-[-0.01em]">
+        {contact.heading}
+      </h2>
+    </div>
+
+    <p class="reveal delay-1 text-[17px] md:text-[18px] text-ink-secondary leading-[1.75] mb-8 md:mb-10">
+      {contact.description}
+    </p>
+
+    <div class="reveal delay-2 mb-8 md:mb-10 flex items-center justify-center gap-2" id="email-row">
+      <a href={`mailto:${site.email}`} class="inline-flex items-center gap-2 text-[20px] sm:text-[26px] md:text-[32px] font-mono font-bold text-cern-blue hover:text-cern-blue-light transition-colors" id="email-link">
+        <lord-icon src={liSrc(contact.emailIcon)} trigger="morph" colors={LI.dark} class="li-xl shrink-0" id="email-icon"></lord-icon>
+        {site.email}
+      </a>
+      <button id="copy-email-btn" class="p-2 rounded-[6px] text-ink-tertiary hover:text-cern-blue hover:bg-cern-blue-wash transition-all duration-200 cursor-pointer bg-transparent border-none shrink-0" aria-label="Copy email to clipboard" title="Copy email" data-email={site.email}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="copy-icon"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="check-icon" class="hidden text-accent-green"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+
+    <div class="reveal delay-3 flex flex-wrap items-center justify-center gap-5">
+      {site.social.github && (
+        <a href={site.social.github} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-ink-tertiary hover:text-cern-blue transition-colors no-underline text-[15px] font-mono" aria-label="GitHub">
+          <lord-icon src={liSrc('jjxzcivr')} trigger="morph" colors={LI.dark} class="li-base"></lord-icon>
+          GitHub
+        </a>
+      )}
+      {site.social.linkedin && (
+        <a href={site.social.linkedin} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-ink-tertiary hover:text-cern-blue transition-colors no-underline text-[15px] font-mono" aria-label="LinkedIn">
+          <lord-icon src={liSrc('euybrknk')} trigger="morph" colors={LI.dark} class="li-base"></lord-icon>
+          LinkedIn
+        </a>
+      )}
+      {Object.entries(site.social).filter(([k]) => k !== 'github' && k !== 'linkedin').map(([key, url]: [string, any]) => (
+        <a href={url} target="_blank" rel="noopener" class="inline-flex items-center text-ink-tertiary hover:text-cern-blue transition-colors no-underline text-[15px] font-mono">
+          {key}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const copyBtn = document.getElementById('copy-email-btn');
+  const copyIcon = document.getElementById('copy-icon');
+  const checkIcon = document.getElementById('check-icon');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(copyBtn.dataset.email!);
+        copyIcon?.classList.add('hidden');
+        checkIcon?.classList.remove('hidden');
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden');
+          checkIcon?.classList.add('hidden');
+        }, 2000);
+      } catch {}
+    });
+  }
+</script>

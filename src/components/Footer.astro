@@ -1,0 +1,24 @@
+---
+import { load, LI, liSrc } from '../lib/data';
+const site = load('site.yaml');
+const contact = load('contact.yaml');
+---
+<footer class="py-8 px-6 bg-surface-sunken border-t border-border">
+  <div class="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[14px] text-ink-tertiary">
+    <p class="m-0">&copy; <span set:html={contact.footer.copyright} /> Icons by <a href={contact.footer.iconsUrl} target="_blank" rel="noopener" class="text-ink-tertiary hover:text-cern-blue transition-colors no-underline">{contact.footer.iconsAttribution}</a>.</p>
+    <div class="flex items-center gap-5">
+      {site.social.github && (
+        <a href={site.social.github} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-ink-tertiary hover:text-cern-blue transition-colors no-underline font-mono text-[13px] uppercase tracking-[0.08em]">
+          <lord-icon src={liSrc('jjxzcivr')} trigger="morph" colors={LI.dark} class="li-md"></lord-icon>
+          GitHub
+        </a>
+      )}
+      {site.social.linkedin && (
+        <a href={site.social.linkedin} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-ink-tertiary hover:text-cern-blue transition-colors no-underline font-mono text-[13px] uppercase tracking-[0.08em]">
+          <lord-icon src={liSrc('euybrknk')} trigger="morph" colors={LI.dark} class="li-md"></lord-icon>
+          LinkedIn
+        </a>
+      )}
+    </div>
+  </div>
+</footer>

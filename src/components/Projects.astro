@@ -1,0 +1,136 @@
+---
+import { load, LI, liSrc } from '../lib/data';
+const projects = load('projects.yaml');
+---
+<section id="projects" class="py-20 md:py-28 px-6 bg-surface-sunken scroll-mt-16">
+  <div class="max-w-[1100px] mx-auto">
+    <div class="reveal">
+      <p class="text-[14px] font-mono text-cern-blue tracking-[0.12em] uppercase mb-3">{projects.label}</p>
+      <h2 class="font-display text-[32px] md:text-[44px] font-bold text-ink mb-10 tracking-[-0.01em]">
+        {projects.heading}
+      </h2>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-10" id="project-filter-tabs">
+      {projects.statuses.map((status: string) => (
+        <button
+          class:list={[
+            "px-4 py-1.5 text-[13px] font-medium rounded-full border transition-colors cursor-pointer",
+            status === 'All'
+              ? 'bg-cern-blue text-white border-cern-blue'
+              : 'bg-transparent text-ink-secondary border-border hover:border-cern-blue hover:text-cern-blue'
+          ]}
+          data-filter={status}
+        >
+          {status}
+        </button>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid">
+      {projects.items.map((project: any, i: number) => {
+        const statusClass = project.status === 'Live' ? 'bg-accent-green/10 text-accent-green'
+          : project.status === 'Open Source' ? 'bg-cern-blue/10 text-cern-blue'
+          : project.status === 'Hackathon Winner' ? 'bg-accent-amber/10 text-accent-amber'
+          : 'bg-ink-tertiary/10 text-ink-tertiary';
+        return (
+        <a href={project.url || undefined} target={project.url ? "_blank" : undefined} rel={project.url ? "noopener" : undefined}
+          class={`reveal ${i % 2 === 1 ? 'delay-1' : ''} card-glow bg-surface-raised rounded-[8px] p-7 block no-underline`}
+          data-status={project.status} data-featured={project.featured ? 'true' : 'false'}>
+          <div class="flex items-start justify-between mb-4">
+            <lord-icon src={liSrc(project.icon || 'gsjfryhc')} trigger="morph" colors={LI.dark} class="li-2xl"></lord-icon>
+            <span class={`inline-block px-2.5 py-1 text-[12px] font-medium rounded font-mono uppercase ${statusClass}`}>{project.status}</span>
+          </div>
+          <h3 class="font-display text-[21px] font-bold text-ink m-0 mb-1">{project.title}</h3>
+          <p class="text-[15px] text-cern-blue font-medium mb-3 mt-0">{project.subtitle}</p>
+          <p class="text-[16px] text-ink-secondary leading-[1.7] mb-4 mt-0">{project.description}</p>
+          <div class="flex flex-wrap gap-1.5">
+            {project.tech.map((t: string) => (
+              <span class="inline-block px-2.5 py-1 text-[13px] font-medium rounded bg-cern-blue-wash text-cern-blue font-mono">{t}</span>
+            ))}
+          </div>
+        </a>
+        );
+      })}
+    </div>
+
+    <div class="flex justify-center mt-8" id="projects-expand-wrap">
+      <button id="projects-expand-btn" class="inline-flex items-center gap-2 px-5 py-2.5 text-[15px] font-medium text-ink-secondary hover:text-cern-blue transition-colors cursor-pointer bg-transparent border border-border rounded-full hover:border-cern-blue">
+        More projects
+        <lord-icon src={liSrc('gupcdncx')} trigger="morph" colors={LI.dark} class="li-md" id="expand-arrow"></lord-icon>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const filterBtns = document.querySelectorAll('#project-filter-tabs button');
+  const projectCards = Array.from(document.querySelectorAll('#projects-grid > a'));
+  const expandBtn = document.getElementById('projects-expand-btn');
+  const expandWrap = document.getElementById('projects-expand-wrap');
+  let expanded = false;
+  let activeFilter = 'All';
+  const MAX_VISIBLE = 4;
+
+  function applyVisibility() {
+    let matchCount = 0;
+    projectCards.forEach(function(card) {
+      var el = card as HTMLElement;
+      var matches = activeFilter === 'All' || el.getAttribute('data-status') === activeFilter;
+      if (!matches) {
+        el.style.display = 'none';
+        return;
+      }
+      matchCount++;
+      if (!expanded && matchCount > MAX_VISIBLE) {
+        el.style.display = 'none';
+      } else {
+        el.style.display = '';
+        el.classList.remove('visible');
+        void el.offsetWidth;
+        el.classList.add('visible');
+      }
+    });
+    if (expandWrap) {
+      (expandWrap as HTMLElement).style.display = matchCount > MAX_VISIBLE ? '' : 'none';
+    }
+    if (expandBtn) {
+      expandBtn.innerHTML = expanded
+        ? 'Less projects <lord-icon src="https://cdn.lordicon.com/gupcdncx.json" trigger="morph" colors="primary:#1A1D23,secondary:#2E5090" class="li-md" style="transform:rotate(180deg)"></lord-icon>'
+        : 'More projects <lord-icon src="https://cdn.lordicon.com/gupcdncx.json" trigger="morph" colors="primary:#1A1D23,secondary:#2E5090" class="li-md"></lord-icon>';
+    }
+
+    // Re-animate newly visible icons
+    setTimeout(() => {
+      document.querySelectorAll('#projects-grid lord-icon').forEach(function(icon: any) {
+        var card = icon.closest('a');
+        if (card && card.style.display !== 'none' && icon.playerInstance) {
+          icon.playerInstance.playFromBeginning();
+        }
+      });
+    }, 100);
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.getAttribute('data-filter') || 'All';
+      expanded = false;
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-cern-blue', 'text-white', 'border-cern-blue');
+        b.classList.add('bg-transparent', 'text-ink-secondary', 'border-border');
+      });
+      btn.classList.remove('bg-transparent', 'text-ink-secondary', 'border-border');
+      btn.classList.add('bg-cern-blue', 'text-white', 'border-cern-blue');
+      applyVisibility();
+    });
+  });
+
+  if (expandBtn) {
+    expandBtn.addEventListener('click', () => {
+      expanded = !expanded;
+      applyVisibility();
+    });
+  }
+
+  applyVisibility();
+</script>
